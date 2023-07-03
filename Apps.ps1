@@ -14,11 +14,17 @@ $apps = @(
     @{name = "RiotGames.Valorant" ; displayName = "Valorant" }
 )
 
-Write-Output "App Installation Script"
+# ANSI escape sequences for color
+$colorGreen = "`e[32m"
+$colorCyan = "`e[36m"
+$colorYellow = "`e[33m"
+$colorReset = "`e[0m"
+
+Write-Output "${colorCyan}App Installation Script${colorReset}"
 Write-Output "Please select which apps to install (enter the corresponding numbers, separated by commas):"
 
 for ($i = 0; $i -lt $apps.Count; $i++) {
-    Write-Output "$($i+1). $($apps[$i].displayName)"
+    Write-Output "$($colorYellow)$($i+1). $($apps[$i].displayName)${colorReset}"
 }
 
 $userInput = Read-Host "Selection:"
@@ -28,26 +34,26 @@ $selectedIndices = $userInput.Split(',') | ForEach-Object { $_.Trim() } | Where-
 if ($selectedIndices) {
     $selectedApps = $selectedIndices | ForEach-Object { $apps[$_ - 1] }
     
-    Write-Output "Selected apps for installation:"
+    Write-Output "${colorGreen}Selected apps for installation:${colorReset}"
     
     foreach ($app in $selectedApps) {
-        Write-Output $app.displayName
+        Write-Output "$($colorGreen)$($app.displayName)${colorReset}"
     }
     
     $installConfirmation = Read-Host "Do you want to proceed with the installation? (Y/N)"
     
     if ($installConfirmation -eq "Y" -or $installConfirmation -eq "y") {
         foreach ($app in $selectedApps) {
-            Write-Host "Installing: $($app.displayName)"
+            Write-Host "${colorCyan}Installing: $($app.displayName)${colorReset}"
             winget install --exact --silent $app.name --accept-package-agreements
         }
         
-        Write-Host "Installation completed."
+        Write-Host "${colorGreen}Installation completed.${colorReset}"
     }
     else {
-        Write-Host "Installation canceled."
+        Write-Host "${colorYellow}Installation canceled.${colorReset}"
     }
 }
 else {
-    Write-Output "No valid selection entered. Installation canceled."
+    Write-Output "${colorYellow}No valid selection entered. Installation canceled.${colorReset}"
 }
