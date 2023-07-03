@@ -3,7 +3,6 @@ Write-Output "Installing Apps"
 $apps = @(
     @{name = "Valve.Steam" }, 
     @{name = "Microsoft.Edge.Dev" },
-    @{name = "Microsoft.PowerToys --source winget" }, 
     @{name = "CodecGuide.K-LiteCodecPack.Standard" }, 
     @{name = "Microsoft.VisualStudioCode" }, 
     @{name = "OBSProject.OBSStudio.Pre-release" }, 
@@ -11,7 +10,6 @@ $apps = @(
     @{name = "Discord.Discord" }, 
     @{name = "7zip.7zip" }, 
     @{name = "Elgato.WaveLink"  },
-    @{name = "Bitwarden.Bitwarden" },
     @{name = "Avidemux.Avidemux" },
     @{name = "RiotGames.Valorant.EU" }
 );
