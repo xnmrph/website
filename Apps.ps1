@@ -12,7 +12,7 @@ $apps = @(
     @{name = "Bitwarden.Bitwarden" ; displayName = "Bitwarden" },
     @{name = "Avidemux.Avidemux" ; displayName = "Avidemux" },
     @{name = "Eugeny.Tabby" ; displayName = "Tabby" },
-    @(name = "ThaUnknown.Miru" ; displayName = "Miru-Anime"),
+    @(name = "ThaUnknown.Miru" ; displayName = "Miru-Anime" ),
     @{name = "FACEITLTD.FACEITAC" ; displayName = "FACEIT AC" },
     @{name = "RiotGames.Valorant" ; displayName = "Valorant" }
 )
