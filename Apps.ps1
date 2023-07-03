@@ -13,18 +13,17 @@ $apps = @(
     @{name = "RiotGames.Valorant.EU" }
 )
 
-Foreach ($app in $apps) {
+$selectedApps = $apps | Out-GridView -Title "Select Apps to Install" -PassThru
+
+Foreach ($app in $selectedApps) {
     $listApp = winget list --exact -q $app.name --accept-source-agreements 
     if (![String]::Join("", $listApp).Contains($app.name)) {
-        $install = Read-Host "Do you want to install $($app.name)? (yes/no)"
-        if ($install -eq "yes") {
-            Write-Host "Installing:" $app.name
-            if ($app.source -ne $null) {
-                winget install --exact --silent $app.name --source $app.source --accept-package-agreements
-            }
-            else {
-                winget install --exact --silent $app.name --accept-package-agreements
-            }
+        Write-Host "Installing:" $app.name
+        if ($app.source -ne $null) {
+            winget install --exact --silent $app.name --source $app.source --accept-package-agreements
+        }
+        else {
+            winget install --exact --silent $app.name --accept-package-agreements
         }
     }
     else {
