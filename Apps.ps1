@@ -1,38 +1,53 @@
-Write-Output "Installing Apps"
 $apps = @(
-    @{name = "Valve.Steam" }, 
-    @{name = "Microsoft.Edge.Dev" },
-    @{name = "Microsoft.PowerToys --source winget" }, 
-    @{name = "CodecGuide.K-LiteCodecPack.Standard" }, 
-    @{name = "Microsoft.VisualStudioCode" }, 
-    @{name = "OBSProject.OBSStudio.Pre-release" }, 
-    @{name = "Spotify.Spotify" }, 
-    @{name = "Discord.Discord" }, 
-    @{name = "7zip.7zip" }, 
-    @{name = "Elgato.WaveLink"  },
-    @{name = "Bitwarden.Bitwarden" },
-    @{name = "Avidemux.Avidemux" },
-    @{name = "RiotGames.Valorant.EU" }
+    @{name = "Valve.Steam"; displayName = "Steam" }, 
+    @{name = "Microsoft.Edge" ; displayName = "Microsoft Edge" },
+    @{name = "Microsoft.PowerToys" ; displayName = "Microsoft PowerToys" }, 
+    @{name = "CodecGuide.K-LiteCodecPack.Standard" ; displayName = "K-Lite Codec Pack Standard" }, 
+    @{name = "Microsoft.VisualStudioCode" ; displayName = "Visual Studio Code" }, 
+    @{name = "OBSProject.OBSStudio" ; displayName = "OBS Studio" }, 
+    @{name = "Spotify.Spotify" ; displayName = "Spotify" }, 
+    @{name = "Discord.Discord" ; displayName = "Discord" }, 
+    @{name = "7zip.7zip" ; displayName = "7-Zip" }, 
+    @{name = "Elgato.WaveLink"  ; displayName = "Elgato WaveLink" },
+    @{name = "Bitwarden.Bitwarden" ; displayName = "Bitwarden" },
+    @{name = "Avidemux.Avidemux" ; displayName = "Avidemux" },
+    @{name = "RiotGames.Valorant" ; displayName = "Valorant" }
 )
 
-Foreach ($app in $apps) {
-    $listApp = winget list --exact -q $app.name --accept-source-agreements 
-    if (![String]::Join("", $listApp).Contains($app.name)) {
-        $install = Read-Host "Do you want to install $($app.name)? (Y/N)"
-        if ($install -eq "Y" -or $install -eq "y") {
-            Write-Host "Installing: $($app.name)"
-            if ($app.source -ne $null) {
-                winget install --exact --silent $app.name --source $app.source --accept-package-agreements
-            }
-            else {
-                winget install --exact --silent $app.name --accept-package-agreements
-            }
+Write-Output "App Installation Script"
+Write-Output "Please select which apps to install (enter the corresponding number, separated by commas):"
+
+for ($i = 0; $i -lt $apps.Count; $i++) {
+    Write-Output "$($i+1). $($apps[$i].displayName)"
+}
+
+$userInput = Read-Host "Selection:"
+
+$selectedIndices = $userInput.Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^\d+$' }
+
+if ($selectedIndices) {
+    $selectedApps = $selectedIndices | ForEach-Object { $apps[$_ - 1] }
+    
+    Write-Output "Selected apps for installation:"
+    
+    foreach ($app in $selectedApps) {
+        Write-Output $app.displayName
+    }
+    
+    $installConfirmation = Read-Host "Do you want to proceed with the installation? (Y/N)"
+    
+    if ($installConfirmation -eq "Y" -or $installConfirmation -eq "y") {
+        foreach ($app in $selectedApps) {
+            Write-Host "Installing: $($app.displayName)"
+            winget install --exact --silent $app.name --accept-package-agreements
         }
-        else {
-            Write-Host "Skipping Install of $($app.name)"
-        }
+        
+        Write-Host "Installation completed."
     }
     else {
-        Write-Host "Skipping Install of $($app.name)"
+        Write-Host "Installation canceled."
     }
+}
+else {
+    Write-Output "No valid selection entered. Installation canceled."
 }
