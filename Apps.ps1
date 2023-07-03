@@ -26,9 +26,6 @@ Foreach ($app in $apps) {
                 winget install --exact --silent $app.name --accept-package-agreements
             }
         }
-        else {
-            Write-Host "Skipping Install of " $app.name
-        }
     }
     else {
         Write-Host "Skipping Install of " $app.name
