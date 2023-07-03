@@ -15,7 +15,7 @@ $apps = @(
 )
 
 Write-Output "App Installation Script"
-Write-Output "Please select which apps to install (enter the corresponding number, separated by commas):"
+Write-Output "Please select which apps to install (enter the corresponding numbers, separated by commas):"
 
 for ($i = 0; $i -lt $apps.Count; $i++) {
     Write-Output "$($i+1). $($apps[$i].displayName)"
