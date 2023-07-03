@@ -22,7 +22,7 @@ for ($i = 0; $i -lt $apps.Count; $i++) {
     Write-Host "$($i+1). $($apps[$i].displayName)"
 }
 
-$userInput = Read-Host "Selection:"
+$userInput = Read-Host "Selection"
 
 $selectedIndices = $userInput.Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^\d+$' }
 
