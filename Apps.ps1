@@ -14,17 +14,12 @@ $apps = @(
     @{name = "RiotGames.Valorant" ; displayName = "Valorant" }
 )
 
-# ANSI escape sequences for color
-$colorGreen = "`e[32m"
-$colorCyan = "`e[36m"
-$colorYellow = "`e[33m"
-$colorReset = "`e[0m"
-
-Write-Output "${colorCyan}App Installation Script${colorReset}"
-Write-Output "Please select which apps to install (enter the corresponding numbers, separated by commas):"
+Write-Host "App Installation Script"
+Write-Host "Please select which apps to install (enter the corresponding numbers, separated by commas):"
+Write-Host "0. Install all apps"
 
 for ($i = 0; $i -lt $apps.Count; $i++) {
-    Write-Output "$($colorYellow)$($i+1). $($apps[$i].displayName)${colorReset}"
+    Write-Host "$($i+1). $($apps[$i].displayName)"
 }
 
 $userInput = Read-Host "Selection:"
@@ -32,28 +27,33 @@ $userInput = Read-Host "Selection:"
 $selectedIndices = $userInput.Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^\d+$' }
 
 if ($selectedIndices) {
-    $selectedApps = $selectedIndices | ForEach-Object { $apps[$_ - 1] }
-    
-    Write-Output "${colorGreen}Selected apps for installation:${colorReset}"
+    if ($selectedIndices -contains "0") {
+        $selectedApps = $apps
+        Write-Host "Selected all apps for installation."
+    }
+    else {
+        $selectedApps = $selectedIndices | ForEach-Object { $apps[$_ - 1] }
+        Write-Host "Selected apps for installation:"
+    }
     
     foreach ($app in $selectedApps) {
-        Write-Output "$($colorGreen)$($app.displayName)${colorReset}"
+        Write-Host $app.displayName
     }
     
     $installConfirmation = Read-Host "Do you want to proceed with the installation? (Y/N)"
     
     if ($installConfirmation -eq "Y" -or $installConfirmation -eq "y") {
         foreach ($app in $selectedApps) {
-            Write-Host "${colorCyan}Installing: $($app.displayName)${colorReset}"
+            Write-Host "Installing: $($app.displayName)"
             winget install --exact --silent $app.name --accept-package-agreements
         }
         
-        Write-Host "${colorGreen}Installation completed.${colorReset}"
+        Write-Host "Installation completed."
     }
     else {
-        Write-Host "${colorYellow}Installation canceled.${colorReset}"
+        Write-Host "Installation canceled."
     }
 }
 else {
-    Write-Output "${colorYellow}No valid selection entered. Installation canceled.${colorReset}"
+    Write-Host "No valid selection entered. Installation canceled."
 }
