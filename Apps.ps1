@@ -11,6 +11,8 @@ $apps = @(
     @{name = "Elgato.WaveLink"  ; displayName = "Elgato WaveLink" },
     @{name = "Bitwarden.Bitwarden" ; displayName = "Bitwarden" },
     @{name = "Avidemux.Avidemux" ; displayName = "Avidemux" },
+    @{name = "Eugeny.Tabby" ; displayName = "Tabby" },
+    @{name = "FACEITLTD.FACEITAC" ; displayName = "FACEIT AC" },
     @{name = "RiotGames.Valorant" ; displayName = "Valorant" }
 )
 
