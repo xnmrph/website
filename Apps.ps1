@@ -14,12 +14,36 @@ $apps = @(
     @{name = "RiotGames.Valorant" ; displayName = "Valorant" }
 )
 
-Write-Host "App Installation Script"
-Write-Host "Please select which apps to install (enter the corresponding numbers, separated by commas):"
-Write-Host "0. Install all apps"
+function Write-ColorText {
+    param(
+        [Parameter(Mandatory = $true)]
+        [String]$Text,
+
+        [ConsoleColor]$Color = "White"
+    )
+    $originalColor = $host.UI.RawUI.ForegroundColor
+    Write-Host $Text -ForegroundColor $Color
+    $host.UI.RawUI.ForegroundColor = $originalColor
+}
+
+function Write-ColorLine {
+    param(
+        [Parameter(Mandatory = $true)]
+        [String]$Text,
+
+        [ConsoleColor]$Color = "White"
+    )
+    Write-ColorText $Text $Color
+    Write-Host
+}
+
+Write-ColorLine "App Installation Script" -Color "Yellow"
+Write-ColorText "Please select which apps to install (enter the corresponding numbers, separated by commas):" -Color "Cyan"
+Write-ColorText "0. Install all apps" -Color "Cyan"
+Write-Host
 
 for ($i = 0; $i -lt $apps.Count; $i++) {
-    Write-Host "$($i+1). $($apps[$i].displayName)"
+    Write-ColorText ("{0}. {1}" -f ($i+1), $apps[$i].displayName) -Color "Yellow"
 }
 
 $userInput = Read-Host "Selection"
@@ -29,31 +53,31 @@ $selectedIndices = $userInput.Split(',') | ForEach-Object { $_.Trim() } | Where-
 if ($selectedIndices) {
     if ($selectedIndices -contains "0") {
         $selectedApps = $apps
-        Write-Host "Selected all apps for installation."
+        Write-ColorLine "Selected all apps for installation." -Color "Green"
     }
     else {
         $selectedApps = $selectedIndices | ForEach-Object { $apps[$_ - 1] }
-        Write-Host "Selected apps for installation:"
+        Write-ColorLine "Selected apps for installation:" -Color "Green"
     }
     
     foreach ($app in $selectedApps) {
-        Write-Host $app.displayName
+        Write-ColorText $app.displayName -Color "Yellow"
     }
     
     $installConfirmation = Read-Host "Do you want to proceed with the installation? (Y/N)"
     
     if ($installConfirmation -eq "Y" -or $installConfirmation -eq "y") {
         foreach ($app in $selectedApps) {
-            Write-Host "Installing: $($app.displayName)"
+            Write-ColorText ("Installing: {0}" -f $app.displayName) -Color "Green"
             winget install --exact --silent $app.name --accept-package-agreements
         }
         
-        Write-Host "Installation completed."
+        Write-ColorLine "Installation completed." -Color "Green"
     }
     else {
-        Write-Host "Installation canceled."
+        Write-ColorLine "Installation canceled." -Color "Red"
     }
 }
 else {
-    Write-Host "No valid selection entered. Installation canceled."
+    Write-ColorLine "No valid selection entered. Installation canceled." -Color "Red"
 }
