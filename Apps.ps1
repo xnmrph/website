@@ -13,7 +13,7 @@ $apps = @(
     @{name = "RiotGames.Valorant.EU" }
 )
 
-$selectedApps = $apps | Out-GridView -Title "Select Apps to Install" -PassThru
+$selectedApps = Show-Command -Name "Select Apps to Install" -ParameterName "apps" -InputObject $apps | Out-GridView -PassThru
 
 Foreach ($app in $selectedApps) {
     $listApp = winget list --exact -q $app.name --accept-source-agreements 
