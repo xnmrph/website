@@ -1,4 +1,3 @@
-#Install New apps
 Write-Output "Installing Apps"
 $apps = @(
     @{name = "Valve.Steam" }, 
@@ -12,19 +11,26 @@ $apps = @(
     @{name = "Elgato.WaveLink"  },
     @{name = "Avidemux.Avidemux" },
     @{name = "RiotGames.Valorant.EU" }
-);
+)
+
 Foreach ($app in $apps) {
     $listApp = winget list --exact -q $app.name --accept-source-agreements 
     if (![String]::Join("", $listApp).Contains($app.name)) {
-        Write-host "Installing:" $app.name
-        if ($app.source -ne $null) {
-            winget install --exact --silent $app.name --source $app.source --accept-package-agreements
+        $install = Read-Host "Do you want to install $($app.name)? (yes/no)"
+        if ($install -eq "yes") {
+            Write-Host "Installing:" $app.name
+            if ($app.source -ne $null) {
+                winget install --exact --silent $app.name --source $app.source --accept-package-agreements
+            }
+            else {
+                winget install --exact --silent $app.name --accept-package-agreements
+            }
         }
         else {
-            winget install --exact --silent $app.name --accept-package-agreements
+            Write-Host "Skipping Install of " $app.name
         }
     }
     else {
-        Write-host "Skipping Install of " $app.name
+        Write-Host "Skipping Install of " $app.name
     }
 }
